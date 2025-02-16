@@ -3,6 +3,9 @@
 ## Overview
 The AI-Based Resume Generator is a web application designed to help users create professional resumes quickly and efficiently. This application allows users to input their personal information, work experience, education, skills, and projects, and generates a beautifully formatted resume that can be downloaded as a PDF.
 
+You can visit this URL to access your AI-Based Resume Generator application [Visit Quick Resume Generator](https://quick-resume-generator.netlify.app)
+
+
 
 ## Features
 - **User-Friendly Interface**: A clean and modern UI that makes it easy to input and manage resume data.
