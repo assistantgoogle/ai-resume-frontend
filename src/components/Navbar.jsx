@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 function Navbar() {
   return (
     <div className="navbar shadow bg-base-100">
@@ -54,7 +54,7 @@ function Navbar() {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Login</a>
+      <Link to="/login" className="btn">Logout</Link> {/* Updated to use Link */}
       </div>
     </div>
   );

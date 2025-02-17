@@ -1,13 +1,15 @@
+// src/components/Resume.jsx
 import React from "react";
 import "daisyui/dist/full.css";
 import { FaGithub, FaLinkedin, FaPhone, FaEnvelope } from "react-icons/fa";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+import { useNavigate } from "react-router-dom";
 
 const Resume = ({ data }) => {
   const resumeRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleDownloadPdf = () => {
     toPng(resumeRef.current, { quality: 1.0 })
@@ -20,11 +22,26 @@ const Resume = ({ data }) => {
         console.error("Error generating PDF", err);
       });
   };
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
+  // Ensure data properties are defined
+  const skills = data.skills || [];
+  const experience = data.experience || [];
+  const education = data.education || [];
+  const certifications = data.certifications || [];
+  const projects = data.projects || [];
+  const achievements = data.achievements || [];
+  const languages = data.languages || [];
+  const interests = data.interests || [];
+
   return (
     <>
       <div
         ref={resumeRef}
-        className="max-w-4xl  mx-auto shadow-2xl rounded-lg p-8 space-y-6 bg-base-100 text-base-content border border-gray-200 dark:border-gray-700 transition-all duration-300"
+        className="max-w-4xl mx-auto shadow-2xl rounded-lg p-8 space-y-6 bg-base-100 text-base-content border border-gray-200 dark:border-gray-700 transition-all duration-300"
       >
         {/* Header Section */}
         <div className="text-center space-y-2">
@@ -46,7 +63,7 @@ const Resume = ({ data }) => {
             )}
             {data.personalInformation.phoneNumber && (
               <p className="flex items-center text-gray-500">
-                <FaPhone className="mr-2" />{" "}
+                <FaPhone className="mr-2" />
                 {data.personalInformation.phoneNumber}
               </p>
             )}
@@ -90,11 +107,8 @@ const Resume = ({ data }) => {
         <section>
           <h2 className="text-2xl font-semibold text-secondary">Skills</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
-            {data.skills.map((skill, index) => (
-              <div
-                key={index}
-                className="badge badge-outline badge-lg px-4 py-2"
-              >
+            {skills.map((skill, index) => (
+              <div key={index} className="badge badge-outline badge-lg px-4 py-2">
                 {skill.title} -{" "}
                 <span className="ml-1 font-semibold">{skill.level}</span>
               </div>
@@ -107,11 +121,8 @@ const Resume = ({ data }) => {
         {/* Experience Section */}
         <section>
           <h2 className="text-2xl font-semibold text-secondary">Experience</h2>
-          {data.experience.map((exp, index) => (
-            <div
-              key={index}
-              className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700"
-            >
+          {experience.map((exp, index) => (
+            <div key={index} className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700">
               <h3 className="text-xl font-bold">{exp.jobTitle}</h3>
               <p className="text-gray-500">
                 {exp.company} | {exp.location}
@@ -129,11 +140,8 @@ const Resume = ({ data }) => {
         {/* Education Section */}
         <section>
           <h2 className="text-2xl font-semibold text-secondary">Education</h2>
-          {data.education.map((edu, index) => (
-            <div
-              key={index}
-              className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700"
-            >
+          {education.map((edu, index) => (
+            <div key={index} className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700">
               <h3 className="text-xl font-bold">{edu.degree}</h3>
               <p className="text-gray-500">
                 {edu.university}, {edu.location}
@@ -149,14 +157,9 @@ const Resume = ({ data }) => {
 
         {/* Certifications Section */}
         <section>
-          <h2 className="text-2xl font-semibold text-secondary">
-            Certifications
-          </h2>
-          {data.certifications.map((cert, index) => (
-            <div
-              key={index}
-              className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700"
-            >
+          <h2 className="text-2xl font-semibold text-secondary">Certifications</h2>
+          {certifications.map((cert, index) => (
+            <div key={index} className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700">
               <h3 className="text-xl font-bold">{cert.title}</h3>
               <p className="text-gray-500">
                 {cert.issuingOrganization} - {cert.year}
@@ -170,11 +173,8 @@ const Resume = ({ data }) => {
         {/* Projects Section */}
         <section>
           <h2 className="text-2xl font-semibold text-secondary">Projects</h2>
-          {data.projects.map((proj, index) => (
-            <div
-              key={index}
-              className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700"
-            >
+          {projects.map((proj, index) => (
+            <div key={index} className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700">
               <h3 className="text-xl font-bold">{proj.title}</h3>
               <p className="text-gray-600 dark:text-gray-300">
                 {proj.description}
@@ -203,15 +203,10 @@ const Resume = ({ data }) => {
 
         {/* Achievements Section */}
         <section>
-          <h2 className="text-2xl font-semibold text-secondary">
-            Achievements
-          </h2>
-          {Array.isArray(data.achievements) && data.achievements.length > 0 ? (
-            data.achievements.map((ach, index) => (
-              <div
-                key={index}
-                className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700"
-              >
+          <h2 className="text-2xl font-semibold text-secondary">Achievements</h2>
+          {Array.isArray(achievements) && achievements.length > 0 ? (
+            achievements.map((ach, index) => (
+              <div key={index} className="mb-4 p-4 rounded-lg shadow-md bg-base-200 border border-gray-300 dark:border-gray-700">
                 <h3 className="text-xl font-bold">{ach.title}</h3>
                 <p className="text-gray-500">{ach.year}</p>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -230,7 +225,7 @@ const Resume = ({ data }) => {
         <section>
           <h2 className="text-2xl font-semibold text-secondary">Languages</h2>
           <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300">
-            {data.languages.map((lang, index) => (
+            {languages.map((lang, index) => (
               <li key={index}>{lang.name}</li>
             ))}
           </ul>
@@ -242,7 +237,7 @@ const Resume = ({ data }) => {
         <section>
           <h2 className="text-2xl font-semibold text-secondary">Interests</h2>
           <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300">
-            {data.interests.map((interest, index) => (
+            {interests.map((interest, index) => (
               <li key={index}>{interest.name}</li>
             ))}
           </ul>
@@ -252,6 +247,9 @@ const Resume = ({ data }) => {
       <section className="flex justify-center mt-4 ">
         <div onClick={handleDownloadPdf} className="btn btn-primary">
           Print
+        </div>
+        <div onClick={handleLoginClick} className="btn btn-secondary ml-4">
+          Login
         </div>
       </section>
     </>
